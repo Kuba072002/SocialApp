@@ -32,7 +32,7 @@ namespace BackEnd.Controllers
         [HttpPost("confirmEmail")]
         public async Task<ActionResult<bool>> ConfirmEmail(string token)
         {
-            var response = await _authService.VerifyToken(token);
+            var response = await _authService.VerifySecurityToken("confirm_email", token);
             if (!response.Success)
             {
                 return BadRequest(response.Message);

@@ -23,6 +23,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddDataProtection();
 
 builder.Services.AddSwaggerGen(options =>
 {

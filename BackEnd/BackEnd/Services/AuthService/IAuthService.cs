@@ -7,6 +7,6 @@ namespace BackEnd.Services.AuthService
     {
         Task<ServiceResponse<string>> Register(RegisterDto request);
         Task<ServiceResponse<string>> Login(LoginDto request);
-        Task<ServiceResponse> VerifySecurityToken(string token);
+        Task<ServiceResponse> VerifySecurityToken(string purpose, string token);
     }
 }
