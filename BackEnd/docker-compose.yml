@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  backend:
+    image: ${DOCKER_REGISTRY-}backend
+    build:
+      context: .
+      dockerfile: BackEnd/Dockerfile
+  postgresql_database:
+    image: postgres:latest
+    container_name: socialclub_DB
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: socialclubDb
+    ports:
+        - "5432:5432"
