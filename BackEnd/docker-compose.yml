@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: BackEnd/Dockerfile
+    ports:
+        - "7210:443"
   postgresql_database:
     image: postgres:latest
     container_name: socialclub_DB
