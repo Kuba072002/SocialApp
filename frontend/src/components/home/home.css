@@ -1,0 +1,70 @@
+.home {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.home_corner {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    overflow: hidden;
+    background: #231f20 ;
+    transform:translate(-50%,-50%) rotate(-45deg);
+}
+
+
+.home_corner svg{
+    transform:translate(-50%,-50%) rotate(45deg);
+    margin-top: 110px;
+    margin-left: 75px;
+    
+}
+
+.home_logo {
+    margin-top: 15rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.home_logo svg {
+    height: 160px;
+    width: 160px;
+}
+
+.home_logo p {
+    margin-top: 1rem;
+    color: #FFFFFF;
+    font-family: var(--font-logo);
+    font-weight: 800;
+    font-size: 48px;
+    line-height: 70px;
+    letter-spacing: 0.1em;
+}
+
+.home_button {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home_button button {
+    padding: 0.5rem 1rem;
+    color: #fff;
+    background: #FF4820;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 5px;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+}
+
+.animate__animated.animate__lightSpeedInRight {
+    --animate-delay: 0.5s;
+}

@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
+
+:root {
+  --font-family: 'Inter';
+  --font-logo: 'Audiowide';
+/* #191d24 #00bba7 #afafaf08 #bdc3c7-#767a7c*/
+  --color-bg: #393b3c;
+  --color-navbar: #3F81BD;
+  --color-footer: #0A2B3D;
+  --color-input: #9CC3EB;
+  --color-block-dark: #153C56;
+  --color-button: #1F4D70;
+}

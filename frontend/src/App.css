@@ -1,0 +1,29 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: white;
+}
+
+a {
+    color: unset;
+    text-decoration: none;   
+}
+
+.gradient_bg{
+    /* ff 3.6+ */
+    background:-moz-radial-gradient(circle at 3% 25%, rgba(60, 62, 63, 1) 0%, rgba(70, 72, 73, 1) 50%, rgba(70, 72, 73, 1) 100%);
+    /* safari 5.1+,chrome 10+ */
+    background:-webkit-radial-gradient(circle at 3% 25%, rgba(60, 62, 63, 1) 0%, rgba(70, 72, 73, 1) 50%, rgba(70, 72, 73, 1) 100%);
+    /* opera 11.10+ */
+    background:-o-radial-gradient(circle at 3% 25%, rgba(60, 62, 63, 1) 0%, rgba(70, 72, 73, 1) 50%, rgba(70, 72, 73, 1) 100%);
+    /* ie 10+ */
+    background:-ms-radial-gradient(circle at 3% 25%, rgba(60, 62, 63, 1) 0%, rgba(70, 72, 73, 1) 50%, rgba(70, 72, 73, 1) 100%);
+    /* global 92%+ browsers support */
+    background:radial-gradient(circle at 3% 25%, rgba(60, 62, 63, 1) 0%, rgba(70, 72, 73, 1) 50%, rgba(70, 72, 73, 1) 100%);
+}
+  
