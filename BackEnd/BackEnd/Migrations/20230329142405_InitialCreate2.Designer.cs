@@ -3,6 +3,7 @@ using System;
 using BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230329142405_InitialCreate2")]
+    partial class InitialCreate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,8 +59,7 @@ namespace BackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Auths");
                 });
@@ -115,8 +117,7 @@ namespace BackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PictureId")
-                        .IsUnique();
+                    b.HasIndex("PictureId");
 
                     b.ToTable("Users");
                 });
@@ -124,8 +125,8 @@ namespace BackEnd.Migrations
             modelBuilder.Entity("BackEnd.Models.Auth", b =>
                 {
                     b.HasOne("BackEnd.Models.User", "User")
-                        .WithOne("Auth")
-                        .HasForeignKey("BackEnd.Models.Auth", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -135,22 +136,10 @@ namespace BackEnd.Migrations
             modelBuilder.Entity("BackEnd.Models.User", b =>
                 {
                     b.HasOne("BackEnd.Models.Picture", "Picture")
-                        .WithOne("User")
-                        .HasForeignKey("BackEnd.Models.User", "PictureId");
+                        .WithMany()
+                        .HasForeignKey("PictureId");
 
                     b.Navigation("Picture");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.Picture", b =>
-                {
-                    b.Navigation("User")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BackEnd.Models.User", b =>
-                {
-                    b.Navigation("Auth")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

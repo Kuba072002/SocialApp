@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackEnd.ModelsDto
 {
@@ -10,5 +11,12 @@ namespace BackEnd.ModelsDto
         public string Password { get; set; } = string.Empty;
         [Required, Compare("Password")]
         public string ConfirmPassword { get; set; } = string.Empty;
+        [Required]
+        public string FirstName { get; set; } = string.Empty;
+        [Required]
+        public string LastName { get; set; } = string.Empty;
+        [Required]
+        public string BirthDate { get; set; } = string.Empty;
+        public IFormFile? Picture { get; set; } = null;
     }
 }

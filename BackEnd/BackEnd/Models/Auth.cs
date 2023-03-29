@@ -9,5 +9,8 @@
         public DateTime? VerifiedAt { get; set; }
         public int AccessFailedCount { get; set; }
         public DateTime? LockoutEnd { get; set; }
+        //nowe
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

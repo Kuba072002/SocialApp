@@ -3,6 +3,7 @@ using Azure.Core;
 using BackEnd.Data;
 using BackEnd.Models;
 using BackEnd.ModelsDto;
+using BackEnd.Services.UserService;
 using BackEnd.Utility;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.DataProtection;
@@ -49,6 +50,22 @@ namespace BackEnd.Services.AuthService
             auth.Password = CreatePassword(request.Password);
             auth.SecurityStamp = Guid.NewGuid().ToString();
 
+            User user = new User(request.FirstName,request.LastName,request.BirthDate);
+            auth.UserId = user.Id;
+            auth.User = user;
+            if (request.Picture != null)
+            {
+                if (request.Picture.Length > 0)
+                {
+                    var picture = new Picture();
+                    picture.Create(request.Picture);
+                    _context.Pictures.Add(picture);
+                    user.PictureId = picture.Id;
+                    user.Picture = picture;
+                }
+            }
+
+            _context.Users.Add(user);
             _context.Auths.Add(auth);
             await _context.SaveChangesAsync();
 

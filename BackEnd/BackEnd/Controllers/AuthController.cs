@@ -19,7 +19,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<string>> Register(RegisterDto request)
+        public async Task<ActionResult<string>> Register([FromForm]RegisterDto request)
         {
             var response = await _authService.Register(request);
             if (!response.Success)
@@ -30,9 +30,9 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost("confirmEmail")]
-        public async Task<ActionResult<bool>> ConfirmEmail(string token)
+        public async Task<ActionResult<bool>> ConfirmEmail(TokenDto tdto)
         {
-            var response = await _authService.VerifySecurityToken("confirm_email", token);
+            var response = await _authService.VerifySecurityToken(tdto.Purpose, tdto.Token);
             if (!response.Success)
             {
                 return BadRequest(response.Message);

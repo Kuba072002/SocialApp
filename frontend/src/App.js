@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, Login } from "./components"
+import { Home, Login ,Signup_success } from "./components"
 import {
   BrowserRouter,
   Route,
@@ -14,6 +14,7 @@ const App = () => {
       <Routes>
         <Route path="login" element={<Login/>} />
         <Route path="/*" element={<Home />} />
+        <Route path="/signup_success/:token" element={<Signup_success/>} />
       </Routes>
     </BrowserRouter>
   )
