@@ -35,8 +35,6 @@ const Login = () => {
       ...inputs,
       [name]: value
     }));
-   // console.log(typeof signUpInput.birthDate)
-   // console.log(signUpInput.birthDate)
     if (name === 'password' || name === 'confirmPassword')
       validateInput(e);
   };
@@ -83,8 +81,8 @@ const Login = () => {
       return (setsign('signup'));
     }
     e.preventDefault();
-    console.log(signUpInput);
-    console.log(typeof signUpInput.picture);
+    // console.log(signUpInput);
+    // console.log(typeof signUpInput.picture);
     const formData = new FormData();
     formData.append('email',signUpInput.email);
     formData.append('password',signUpInput.password);
@@ -121,7 +119,8 @@ const Login = () => {
     }).then(response => {
       //console.log(response);
       if (response.data) {
-        localStorage.setItem("user", JSON.stringify(response.data));
+        localStorage.setItem("token", response.data);
+        navigate("/profile");
       }
     }
 
