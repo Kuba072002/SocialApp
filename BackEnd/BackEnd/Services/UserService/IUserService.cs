@@ -1,6 +1,16 @@
-﻿namespace BackEnd.Services.UserService
+﻿using BackEnd.Models;
+using BackEnd.ModelsDto;
+using BackEnd.Utility;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BackEnd.Services.UserService
 {
     public interface IUserService
     {
+        public string getMyName();
+        Task<ServiceResponse<PictureDto>> getMyPicture();
+        Task<ServiceResponse<UserDto>> getMe();
+        Task<ServiceResponse> addPost(AddPostDto request);
+        Task<ServiceResponse<List<PostDto>>> getMyPosts();
     }
 }

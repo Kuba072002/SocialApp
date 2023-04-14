@@ -14,6 +14,9 @@ namespace BackEnd.Models
         //public string Img_location { get; set; }
         public Auth Auth { get; set; }
 
+        public List<Post> Posts { get; set; }
+        //public List<User> Friends { get; set; }
+
         public User(string firstName, string lastName, string birthDate)
         {
             this.FirstName = firstName;
