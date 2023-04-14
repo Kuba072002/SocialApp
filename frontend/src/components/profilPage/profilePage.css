@@ -1,0 +1,13 @@
+.profilepage{
+    display: flex;
+    padding: 1rem;
+    flex-direction: row;
+}
+
+.profilepage_info{
+    margin: 1rem;
+}
+
+.profilepage_post{
+    margin: 1rem 2rem;
+}

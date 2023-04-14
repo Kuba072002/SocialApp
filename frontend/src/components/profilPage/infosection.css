@@ -1,0 +1,93 @@
+.infosection{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin: 2rem; */
+    border-radius: 15px;
+    max-width: 30rem;
+}
+
+.infosection_container{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* margin: 2rem; */
+    padding: 2rem 2rem;
+}
+
+.infosection_container-image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.infosection_container-image img{
+    width: 150px;
+    height: 150px;
+    border: 3px solid #767a7c;
+    border-radius: 50%;
+}
+
+.infosection_container-name{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 1rem;
+    justify-content: center;
+}
+.infosection_container-name p{
+    color: #fff;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 30px;
+    text-transform: capitalize;
+    margin: 0 0.2rem;
+}
+
+.infosection_container-data{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    padding: 1rem 1rem;
+}
+.infosection_container-data-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5rem;
+}
+.infosection_container-data label {
+    justify-content: flex-start;
+    color: #bdc3c7;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+}
+.infosection_container-data svg{
+    justify-content: flex-start;
+}
+
+.infosection_container-data p {
+    justify-content: flex-end;
+    color: #fff;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 32px;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.infosection_hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(236, 243, 243, 1), rgba(0, 0, 0, 0));
+    /* border: 1px solid grey; */
+    /* border-radius: 10px; */
+}
