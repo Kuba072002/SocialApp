@@ -94,6 +94,7 @@ namespace BackEnd.Services.UserService
                     var post = new Post
                     {
                         Content = request.Content,
+                        CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                         Pictures = new List<Picture>(),
                         User= user,
                         UserId= userId
@@ -178,7 +179,8 @@ namespace BackEnd.Services.UserService
                                 UserId = userId,
                                 User = user,
                                 FriendId = friendId,
-                                Friend = friend
+                                Friend = friend,
+                                AddedDate = DateTime.Now.ToString("yyyy-MM-dd")
                             };
 
                             user.Friends.Add(userFriend);
