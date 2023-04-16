@@ -130,7 +130,13 @@ namespace BackEnd.Services.UserService
                     List<PostDto> response = new();
                     foreach (Post p in user.Posts)
                     {
-                        var post = new PostDto { Id = p.Id, Content = p.Content, UserId = p.UserId,Pictures = new() };
+                        var post = new PostDto { 
+                            Id = p.Id, 
+                            Content = p.Content, 
+                            CreateDate = p.CreateDate , 
+                            UserId = p.UserId,
+                            Pictures = new() 
+                        };
                         if(p.Pictures != null)
                         {
                             foreach(Picture pic in p.Pictures)
