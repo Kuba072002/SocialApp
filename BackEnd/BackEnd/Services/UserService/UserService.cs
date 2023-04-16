@@ -1,4 +1,5 @@
-﻿using BackEnd.Data;
+﻿using Azure;
+using BackEnd.Data;
 using BackEnd.Models;
 using BackEnd.ModelsDto;
 using BackEnd.Utility;
@@ -157,6 +158,63 @@ namespace BackEnd.Services.UserService
                 }
             }
             return new ServiceResponse<List<PostDto>> { Success=false, Message = "" };
+        }
+
+        public async Task<ServiceResponse> addFriend(int friendId)
+        {
+            if (_contextAccessor.HttpContext != null)
+            {
+                int userId = Int32.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var user = await _context.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.Id == userId);
+                if (user != null && userId != friendId)
+                {
+                    var isFriendAlready = user.Friends.FirstOrDefault(f => f.FriendId == friendId);
+                    if (isFriendAlready == null) {
+                        var friend = await _context.Users.FirstOrDefaultAsync(u => u.Id == friendId);
+                        if (friend != null)
+                        {
+                            var userFriend = new UserFriend
+                            {
+                                UserId = userId,
+                                User = user,
+                                FriendId = friendId,
+                                Friend = friend
+                            };
+
+                            user.Friends.Add(userFriend);
+                            _context.UserFriends.Add(userFriend);
+                            await _context.SaveChangesAsync();
+                            return new ServiceResponse { Success = true, Message = "Success" };
+                        }
+                    }
+                    return new ServiceResponse { Success = false, Message = "Friend already" };
+                }
+            }
+            return new ServiceResponse { Success = false, Message = "" };
+        }
+        public async Task<ServiceResponse<List<FriendDto>>> getFriends(int userId)
+        {
+            //var user = await _context.Users.Include(u => u.Friends).ThenInclude(p => p.Picture).FirstOrDefaultAsync(u => u.Id == userId);
+            var friends = await _context.UserFriends
+                .Include(uf => uf.Friend)
+                .ThenInclude(u => u.Picture)
+                .Where(uf => uf.UserId == userId)
+                .Select(uf => new FriendDto
+                {
+                    Id = uf.FriendId,
+                    FirstName = uf.Friend.FirstName,
+                    LastName = uf.Friend.LastName,
+                    Picture = uf.Friend.Picture == null ? null : new PictureDto
+                    {
+                        Id = uf.Friend.Picture.Id,
+                        Name = uf.Friend.Picture.Name,
+                        Data = uf.Friend.Picture.Data,
+                        FileExtension = uf.Friend.Picture.FileExtension
+                    }
+                })
+                .ToListAsync();
+     
+            return new ServiceResponse<List<FriendDto>> { Data = friends, Success = true, Message = "" };
         }
     }
 }

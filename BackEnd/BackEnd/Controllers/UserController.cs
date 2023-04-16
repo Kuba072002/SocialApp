@@ -19,19 +19,6 @@ namespace BackEnd.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         [HttpGet("GetMyName"), Authorize]
         public ActionResult<string> GetMyName()
         {
@@ -75,6 +62,28 @@ namespace BackEnd.Controllers
         public async Task<ActionResult<List<PostDto>>> GetMyPosts()
         {
             var response = await _userService.getMyPosts();
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+            return Ok(response.Data);
+        }
+
+        [HttpPost("AddFriend"), Authorize]
+        public async Task<ActionResult<string>> AddFriend(int friendId)
+        {
+            var response = await _userService.addFriend(friendId);
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+            return Ok(response.Message);
+        }
+
+        [HttpGet("GetFriends"), Authorize]
+        public async Task<ActionResult<List<FriendDto>>> GetFriends(int userId)
+        {
+            var response = await _userService.getFriends(userId);
             if (!response.Success)
             {
                 return BadRequest(response.Message);
