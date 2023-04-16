@@ -38,3 +38,24 @@
     margin: 0 1rem;
     cursor: pointer;
 }
+
+.navbar_account{
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.navbar_account button{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    color: #bdc3c7;
+    background: transparent;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    border: 0;
+    cursor: pointer;
+}
