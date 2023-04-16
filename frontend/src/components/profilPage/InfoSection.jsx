@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MdOutlineWorkOutline, MdOutlineCake, MdOutlineLocationOn, MdOutlineAccountCircle } from "react-icons/md";
+import Account from '../../assets/account.png'
 import './infosection.css'
 
 const InfoSection = () => {
@@ -32,12 +33,12 @@ const InfoSection = () => {
       }
 // MdOutlineManageAccounts
     return (
-        <div className='infosection gradient_bg'>
+        <div className='infosection bg'>
             <div className='infosection_container'>
                 <div className='infosection_container-image'>
-                    {userData.picture && (
+                    {userData.picture ? (
                         <img src={`data:image/${userData.picture.fileExtension};base64,${userData.picture.data}`} alt={userData.picture.name} />
-                    )}
+                    ) : <img src={Account} alt={Account} />}
                 </div>
                 <div className='infosection_container-name'>
                     <p>{userData.firstName}</p>

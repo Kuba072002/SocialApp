@@ -17,7 +17,7 @@
 }
 
 .addpost_container-image img{
-    width: 50px;
+    /* width: 50px; */
     height: 50px;
     border: 3px solid #767a7c;
     border-radius: 50%;
@@ -28,8 +28,8 @@
     margin-left: 1rem;
     justify-content: flex-start;
     align-items: center;
-    color: #FFFFFF;
-    background: #767a7c;
+    color: #767a7c;
+    background: #FFFFFF;
     width: 400px;
     height: 70px;
 

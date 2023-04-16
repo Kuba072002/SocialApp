@@ -2,6 +2,7 @@ import { React, useState } from 'react'
 import { MdOutlineImage, MdSend } from "react-icons/md";
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
+import Account from '../../assets/account.png'
 import "./addPost.css"
 
 const AddPost = ({ userPicture }) => {
@@ -36,12 +37,12 @@ const AddPost = ({ userPicture }) => {
     };
 
     return (
-        <div className='addpost gradient_bg'>
+        <div className='addpost bg'>
             <div className='addpost_container'>
                 <div className='addpost_container-image'>
-                    {userPicture && (
+                    {userPicture ? (
                         <img src={`data:image/${userPicture.fileExtension};base64,${userPicture.data}`} alt={userPicture.name} />
-                    )}
+                    ) : <img src={Account} alt={Account} />}
                 </div>
                 <textarea type="text" className="addpost_container-form-i"
                     value={content}
