@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { MdOutlineWorkOutline, MdOutlineCake, MdOutlineLocationOn, MdOutlineAccountCircle } from "react-icons/md";
 import Account from '../../assets/account.png'
 import './infosection.css'
 
-const InfoSection = () => {
+const InfoSection = ({data}) => {
     const [userData, setUserData] = useState('');
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get('https://localhost:7210/api/User/GetMe', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setUserData(response.data);
-            } catch (error) {
-                console.log(error.response);
-            }
-        }
-        fetchData();
-    }, []);
+        // async function fetchData() {
+        //     try {
+        //         const token = localStorage.getItem('token');
+        //         const response = await axios.get('https://localhost:7210/api/User/GetMe', {
+        //             headers: {
+        //                 'Authorization': `Bearer ${token}`
+        //             }
+        //         });
+        //         setUserData(response.data);
+        //     } catch (error) {
+        //         console.log(error.response);
+        //     }
+        // }
+        setUserData(data);
+        // fetchData();
+    }, [data]);
 
     function calculateAge(birthDate) {
         const currentDate = new Date();

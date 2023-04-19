@@ -1,52 +1,69 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 import axios from 'axios';
-import { Navbar } from '../';
 import InfoSection from './InfoSection';
-import AddPost from '../addPost/AddPost';
+import { AddPost, Post } from '../';
 import "./profilePage.css"
 
 const ProfilPage = () => {
     const [userData, setUserData] = useState('');
+    // const [posts, setPosts] = useState([]);
+    const { userId } = useParams();
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get('https://localhost:7210/api/User/GetMe', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setUserData(response.data);
-            } catch (error) {
-                console.log(error.response);
-            }
+    // async function fetchPosts() {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.get(`https://localhost:7210/api/User/GetMyPosts/${userId}`, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`
+    //             }
+    //         });
+    //         setPosts(response.data);
+    //     } catch (error) {
+    //         console.log(error.response);
+    //     }
+    // }
+    const fetchData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`https://localhost:7210/api/User/GetUser/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            // console.log(response.data);
+            setUserData(response.data);
+        } catch (error) {
+            console.log(error.response);
         }
-        fetchData();
-    }, []);
-    // const handleClick = async () => {
-    // const token = localStorage.getItem('token');
-    // const response = await axios.get("https://localhost:7210/api/User/GetMe",{headers:{'Authorization': `Bearer ${token}`}})
-    //     .catch((error) => {console.log(JSON.stringify(error.response.data));});
-    // setUserData(response.data);};
+    }
 
+    useEffect(() => {  
+        fetchData();
+    });
+    
     return (
         <div>
-            <Navbar />
-            <div className='profilepage bg'>
+            <div className='profilepage bg2'>
                 <div className='profilepage_info'>
                     <InfoSection data={userData} />
                 </div>
                 <div className='profilepage_post'>
-                    <AddPost userPicture={userData.picture}/>
+                    <AddPost userPicture={userData.picture} />
+                    {userData && userData.posts.map((p,i) => 
+                        <Post key={i} 
+                            id={p.id}
+                            content={p.content}
+                            createDate={p.createDate}
+                            userId={p.userId}
+                            firstName={userData.firstName}
+                            lastName={userData.lastName}
+                            userPicture={userData.picture}
+                            pictures={p.pictures}
+                        />
+                    )}
                 </div>
             </div>
-            {/* <h1>ProfilPage</h1>
-                <button onClick={handleClick}>Get me</button>
-                <br/>
-                {userData.picture && (
-                    <img src={`data:image/${userData.picture.fileExtension};base64,${userData.picture.data}`} alt={userData.picture.name} />
-                )} */}
         </div>
     )
 }

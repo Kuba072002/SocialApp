@@ -5,9 +5,13 @@
 }
 
 .profilepage_info{
-    margin: 1rem;
+    margin: 1rem 5rem;
+    display: flex;
+    flex: 0.5;
 }
 
 .profilepage_post{
+    /* display: flex; */
+    /* flex: 1; */
     margin: 1rem 2rem;
 }
