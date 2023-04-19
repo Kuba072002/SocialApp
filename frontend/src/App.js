@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, Login ,SignupSuccess, ProfilPage } from "./components"
+import { Home, Login ,SignupSuccess, ProfilPage, HomeLogged } from "./components"
 import { ProtectedRoute } from './components/ProtectedRoute';
 import {
   BrowserRouter,
@@ -17,7 +17,8 @@ const App = () => {
         <Route path="/signup_success/:token" element={<SignupSuccess/>} />
         
         <Route element={<ProtectedRoute />}>
-          <Route path="profile" element={<ProfilPage />} />
+          <Route path="home" element={<HomeLogged />} />
+          <Route path="profile/:userId" element={<ProfilPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

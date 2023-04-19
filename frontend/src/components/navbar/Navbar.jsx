@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from "react-router-dom";
+// import jwtDecode from 'jsonwebtoken';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import {MdLogout} from "react-icons/md"; 
 import "./navbar.css"
@@ -19,7 +20,7 @@ const Navbar = () => {
           <Logo fill="#767a7c" />
         </div>
         <div className='navbar-links_container'>
-          <p><Link to="/">Home</Link></p>
+          <p><Link to="/home">Home</Link></p>
           <p><Link to="/profile">Profile</Link></p>
         </div>
       </div>

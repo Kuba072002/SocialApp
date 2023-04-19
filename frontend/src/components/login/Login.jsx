@@ -120,7 +120,7 @@ const Login = () => {
       //console.log(response);
       if (response.data) {
         localStorage.setItem("token", response.data);
-        navigate("/profile");
+        navigate("/home");
       }
     }
 

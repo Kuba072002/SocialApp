@@ -2,15 +2,10 @@ import React from 'react'
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import { AiFillGithub } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import HomeLogged from '../homeLogged/HomeLogged';
 import 'animate.css'
 import "./home.css"
 
 const Home = () => {
-  const isAuthenticated = !!localStorage.getItem('token');
-  if (isAuthenticated) {
-    return <HomeLogged />;
-  }
   return (
     <div className='home gradient_bg'>
       <div className='home_corner'>
