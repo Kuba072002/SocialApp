@@ -12,6 +12,8 @@ namespace BackEnd.ModelsDto
         public string? LastName { get; set; }
         public PictureDto? UserPicture { get; set; }
         public List<PictureDto>? Pictures { get; set; }
+        public List<int>? Likes { get; set; }
+        public List<CommentDto>? Comments { get; set; }
 
         public PostDto(int id, string content, string createDate, int userId) {
             Id = id;

@@ -66,12 +66,13 @@ namespace BackEnd.Services.PictureService
         {
             var friends = await _context.UserFriends
                 .Include(uf => uf.Friend).ThenInclude(f => f.Posts).ThenInclude(p => p.Pictures)
+                //.Include(uf => uf.Friend).ThenInclude(f => f.Posts).ThenInclude(p => p.Comments).ThenInclude(c => c.User).ThenInclude(u=> u.Picture)
+                //.Include(uf => uf.Friend).ThenInclude(f => f.Posts).ThenInclude(p => p.Likes)
                 .Include(uf => uf.Friend.Picture)
                 .Where(uf => uf.UserId == userId).ToListAsync();
             List<PostDto> posts = new();
             foreach (var friend in friends)
             {
-                //var friendPosts = friend.Friend.Posts.OrderByDescending(p => p.CreateDate); ;
                 foreach (var post in friend.Friend.Posts)
                 {
                     var pictureDtos = new List<PictureDto>();
