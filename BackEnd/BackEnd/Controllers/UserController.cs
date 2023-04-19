@@ -1,6 +1,7 @@
 ﻿using Azure;
 using BackEnd.Models;
 using BackEnd.ModelsDto;
+using BackEnd.Services.PictureService;
 using BackEnd.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +15,11 @@ namespace BackEnd.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IPostService _postService;
+        public UserController(IUserService userService,IPostService postService)
         {
             _userService = userService;
+            _postService = postService;
         }
 
         [HttpGet("GetMyName"), Authorize]
@@ -36,10 +39,21 @@ namespace BackEnd.Controllers
             return Ok(response.Data);
         }
 
-        [HttpGet("GetMe"), Authorize]
-        public async Task<ActionResult<PictureDto>> GetMe()
+        [HttpGet("getHomeData"), Authorize]
+        public async Task<ActionResult<UserDto>> getHomeData()
         {
-            var response = await _userService.getMe();
+            var response = await _userService.getHomeData();
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+            return Ok(response.Data);
+        }
+
+        [HttpGet("GetUser/{userId}"), Authorize]
+        public async Task<ActionResult<UserDto>> GetUser(int userId)
+        {
+            var response = await _userService.getUser(userId);
             if (!response.Success)
             {
                 return BadRequest(response.Message);
@@ -50,7 +64,7 @@ namespace BackEnd.Controllers
         [HttpPost("AddPost"), Authorize]
         public async Task<ActionResult<string>> AddPost([FromForm] AddPostDto request)
         {
-            var response = await _userService.addPost(request);
+            var response = await _postService.addPost(request);
             if (!response.Success)
             {
                 return BadRequest(response.Message);
@@ -58,10 +72,10 @@ namespace BackEnd.Controllers
             return Ok(response.Message);
         }
 
-        [HttpGet("GetMyPosts"), Authorize]
-        public async Task<ActionResult<List<PostDto>>> GetMyPosts()
+        [HttpGet("GetUserPosts/{userId}"), Authorize]
+        public async Task<ActionResult<List<PostDto>>> GetUserPosts(int userId)
         {
-            var response = await _userService.getMyPosts();
+            var response = await _postService.getUserPosts(userId);
             if (!response.Success)
             {
                 return BadRequest(response.Message);
@@ -80,10 +94,10 @@ namespace BackEnd.Controllers
             return Ok(response.Message);
         }
 
-        [HttpGet("GetFriends"), Authorize]
-        public async Task<ActionResult<List<FriendDto>>> GetFriends(int userId)
+        [HttpGet("GetUserFriends"), Authorize]
+        public async Task<ActionResult<List<FriendDto>>> GetUserFriends(int userId)
         {
-            var response = await _userService.getFriends(userId);
+            var response = await _userService.getUserFriends(userId);
             if (!response.Success)
             {
                 return BadRequest(response.Message);

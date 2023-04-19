@@ -9,10 +9,9 @@ namespace BackEnd.Services.UserService
     {
         public string getMyName();
         Task<ServiceResponse<PictureDto>> getMyPicture();
-        Task<ServiceResponse<UserDto>> getMe();
-        Task<ServiceResponse> addPost(AddPostDto request);
-        Task<ServiceResponse<List<PostDto>>> getMyPosts();
+        Task<ServiceResponse<UserDto>> getHomeData();
+        Task<ServiceResponse<UserDto>> getUser(int userId);
         Task<ServiceResponse> addFriend(int friendId);
-        Task<ServiceResponse<List<FriendDto>>> getFriends(int userId);
+        Task<ServiceResponse<List<FriendDto>>> getUserFriends(int userId);
     }
 }

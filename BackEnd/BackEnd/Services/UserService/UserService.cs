@@ -2,6 +2,7 @@
 using BackEnd.Data;
 using BackEnd.Models;
 using BackEnd.ModelsDto;
+using BackEnd.Services.PictureService;
 using BackEnd.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,12 @@ namespace BackEnd.Services.UserService
     {
         private readonly DataContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
-        public UserService(DataContext context,IHttpContextAccessor contextAccessor)
+        private readonly IPostService _postService;
+        public UserService(DataContext context,IHttpContextAccessor contextAccessor,IPostService postService)
         {
             _context= context;
             _contextAccessor = contextAccessor;
+            _postService = postService;
         }
         public string getMyName()
         {
@@ -40,41 +43,34 @@ namespace BackEnd.Services.UserService
                 if (picture == null) {
                     return new ServiceResponse<PictureDto> { Success = false, Message = "" };
                 }
-                var response = new PictureDto { 
-                    Id= picture.Id,
-                    Name= picture.Name,
-                    Data= picture.Data,
-                    FileExtension= picture.FileExtension
-                };
+                var response = new PictureDto(picture.Id,picture.Name,picture.Data,picture.FileExtension);
                 return new ServiceResponse<PictureDto> { Data = response, Success = true, Message = "" };
             }
             return new ServiceResponse<PictureDto>{ Success = false, Message = "" };
         }
 
-        public async Task<ServiceResponse<UserDto>> getMe()
+        public async Task<ServiceResponse<UserDto>> getHomeData()
         {
             if (_contextAccessor.HttpContext != null)
             {
                 int userId = Int32.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 var user = await _context.Users.Include(u => u.Picture).FirstOrDefaultAsync(u => u.Id == userId);
                 if (user != null) {
-                    var response = new UserDto
-                    {
-                        Id = user.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        BirthDate = user.BirthDate,
-                    };
+                    var response = new UserDto(user.Id,user.FirstName,user.LastName
+                        ,user.BirthDate,user.Location,user.Occupation);
                     if (user.Picture != null)
                     {
-                        response.Picture = new PictureDto
-                        {
-                            Id = user.Picture.Id,
-                            Name = user.Picture.Name,
-                            Data = user.Picture.Data,
-                            FileExtension = user.Picture.FileExtension
-                        };
+                        response.Picture = new PictureDto(user.Picture.Id,user.Picture.Name
+                            ,user.Picture.Data,user.Picture.FileExtension
+                        );
                     }
+                    var userPosts = await _postService.getFriendsPosts(userId);
+                    if (userPosts.Success)
+                        response.Posts = userPosts.Data;
+                    var userFriends = await getUserFriends(userId);
+                    if (userFriends.Success)
+                        response.Friends = userFriends.Data;
+
                     return new ServiceResponse<UserDto> { Data = response, Success = true, Message = "Success" }; 
                 }
             }
@@ -82,83 +78,27 @@ namespace BackEnd.Services.UserService
 
         }
 
-        public async Task<ServiceResponse> addPost(AddPostDto request)
-        {
-            if (_contextAccessor.HttpContext != null)
+        public async Task<ServiceResponse<UserDto>> getUser(int userId) {
+            var user = await _context.Users.Include(u => u.Picture).FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
             {
-                int userId = Int32.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var user = await _context.Users.Include(u => u.Posts).FirstOrDefaultAsync(u => u.Id == userId);
-                string s = "Post added successful!";
-                if (user != null)
+                var response = new UserDto(user.Id, user.FirstName, user.LastName
+                        , user.BirthDate, user.Location, user.Occupation);
+                if (user.Picture != null)
                 {
-                    var post = new Post
-                    {
-                        Content = request.Content,
-                        CreateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                        Pictures = new List<Picture>(),
-                        User= user,
-                        UserId= userId
-                    };
-                    if (request.Pictures != null)
-                    {
-                        foreach (IFormFile p in request.Pictures) {
-                            if (p.Length > 0)
-                            {
-                                var picture = new Picture();
-                                picture.Create(p);
-                                _context.Pictures.Add(picture);
-                                post.Pictures.Add(picture);
-                            } 
-                        }
-                        s = "With pictures";
-                    }
-                    _context.Posts.Add(post);
-                    user.Posts.Add(post);
-                    await _context.SaveChangesAsync();
-                    return new ServiceResponse { Success = true, Message = s };
-                } 
-            }
-            return new ServiceResponse { Success = false, Message = "" };
-        }
-
-        public async Task<ServiceResponse<List<PostDto>>> getMyPosts()
-        {
-            if (_contextAccessor.HttpContext != null)
-            {
-                int userId = Int32.Parse(_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var user = await _context.Users.Include(u => u.Posts).ThenInclude(p => p.Pictures).FirstOrDefaultAsync(u => u.Id == userId);
-                if (user != null && user.Posts != null)
-                {
-                    List<PostDto> response = new();
-                    foreach (Post p in user.Posts)
-                    {
-                        var post = new PostDto { 
-                            Id = p.Id, 
-                            Content = p.Content, 
-                            CreateDate = p.CreateDate , 
-                            UserId = p.UserId,
-                            Pictures = new() 
-                        };
-                        if(p.Pictures != null)
-                        {
-                            foreach(Picture pic in p.Pictures)
-                            {
-                                var picdto = new PictureDto
-                                {
-                                    Id = pic.Id,
-                                    Name = pic.Name,
-                                    Data = pic.Data,
-                                    FileExtension = pic.FileExtension
-                                };
-                                post.Pictures.Add(picdto);
-                            }
-                        }
-                        response.Add(post);
-                    }
-                    return new ServiceResponse<List<PostDto>> { Data=response, Success = true, Message = "" };
+                    response.Picture = new PictureDto(user.Picture.Id, user.Picture.Name
+                        , user.Picture.Data, user.Picture.FileExtension
+                    );
                 }
+                var userPosts = await _postService.getUserPosts(userId);
+                if (userPosts.Success)
+                    response.Posts = userPosts.Data;
+                var userFriends = await getUserFriends(userId);
+                if (userFriends.Success)
+                    response.Friends = userFriends.Data;
+                return new ServiceResponse<UserDto> { Data = response, Success = true, Message = "Success" };
             }
-            return new ServiceResponse<List<PostDto>> { Success=false, Message = "" };
+            return new ServiceResponse<UserDto> { Success = false, Message = "Fail" };
         }
 
         public async Task<ServiceResponse> addFriend(int friendId)
@@ -169,8 +109,8 @@ namespace BackEnd.Services.UserService
                 var user = await _context.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.Id == userId);
                 if (user != null && userId != friendId)
                 {
-                    var isFriendAlready = user.Friends.FirstOrDefault(f => f.FriendId == friendId);
-                    if (isFriendAlready == null) {
+                    var isFriendAlready = user.Friends.Any(f => f.FriendId == friendId);
+                    if (!isFriendAlready) {
                         var friend = await _context.Users.FirstOrDefaultAsync(u => u.Id == friendId);
                         if (friend != null)
                         {
@@ -194,9 +134,8 @@ namespace BackEnd.Services.UserService
             }
             return new ServiceResponse { Success = false, Message = "" };
         }
-        public async Task<ServiceResponse<List<FriendDto>>> getFriends(int userId)
+        public async Task<ServiceResponse<List<FriendDto>>> getUserFriends(int userId)
         {
-            //var user = await _context.Users.Include(u => u.Friends).ThenInclude(p => p.Picture).FirstOrDefaultAsync(u => u.Id == userId);
             var friends = await _context.UserFriends
                 .Include(uf => uf.Friend)
                 .ThenInclude(u => u.Picture)
@@ -206,17 +145,16 @@ namespace BackEnd.Services.UserService
                     Id = uf.FriendId,
                     FirstName = uf.Friend.FirstName,
                     LastName = uf.Friend.LastName,
+                    AddedDate = uf.AddedDate,
                     Picture = uf.Friend.Picture == null ? null : new PictureDto
-                    {
-                        Id = uf.Friend.Picture.Id,
-                        Name = uf.Friend.Picture.Name,
-                        Data = uf.Friend.Picture.Data,
-                        FileExtension = uf.Friend.Picture.FileExtension
-                    }
+                        (uf.Friend.Picture.Id,uf.Friend.Picture.Name
+                        ,uf.Friend.Picture.Data,uf.Friend.Picture.FileExtension)
                 })
+                //.OrderByDescending(f => f.AddedDate)
                 .ToListAsync();
      
             return new ServiceResponse<List<FriendDto>> { Data = friends, Success = true, Message = "" };
         }
+
     }
 }

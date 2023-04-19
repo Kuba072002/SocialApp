@@ -1,5 +1,6 @@
 using BackEnd.Data;
 using BackEnd.Services.AuthService;
+using BackEnd.Services.PictureService;
 using BackEnd.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddDataProtection();
 
 builder.Services.AddSwaggerGen(options =>
