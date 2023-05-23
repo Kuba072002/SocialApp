@@ -76,35 +76,35 @@ namespace BackEnd.Services.AuthService
 
         public async Task<ServiceResponse<string>> Login(LoginDto request)
         {
-            var user = await _context.Auths.FirstOrDefaultAsync(auth => auth.Email == request.Email);
-            if (user == null)
+            var auth = await _context.Auths.FirstOrDefaultAsync(auth => auth.Email == request.Email);
+            if (auth == null)
             {
                 return new ServiceResponse<string> { Success = false, Message = "User not exist or invalid password" };
             }
 
-            if (user.LockoutEnd > DateTime.UtcNow)
+            if (auth.LockoutEnd > DateTime.UtcNow)
             {
                 return new ServiceResponse<string> { Success = false, Message = "User account is temporary locked" };
             }
 
-            if (!PasswordHasher.VerifyPassword(user.Password, request.Password))
+            if (!PasswordHasher.VerifyPassword(auth.Password, request.Password))
             {
-                if (++user.AccessFailedCount == 5)
+                if (++auth.AccessFailedCount == 5)
                 {
-                    user.AccessFailedCount = 0;
-                    user.LockoutEnd = DateTime.UtcNow.AddMinutes(15);
+                    auth.AccessFailedCount = 0;
+                    auth.LockoutEnd = DateTime.UtcNow.AddMinutes(15);
                 }
                 await _context.SaveChangesAsync();
 
                 return new ServiceResponse<string> { Success = false, Message = "User not exist or invalid password" };
             }
 
-            if(user.VerifiedAt == null)
+            if(auth.VerifiedAt == null)
             {
                 return new ServiceResponse<string> { Success = false, Message = "Email not verified" };
             }
 
-            var token = CreateJwt(user);
+            var token = CreateJwt(auth);
 
             return new ServiceResponse<string> { Data = token, Message = " Mess", Success = true };
         }
@@ -131,7 +131,7 @@ namespace BackEnd.Services.AuthService
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, auth.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, auth.UserId.ToString()),
                 new Claim(ClaimTypes.Name, auth.Email)
             };
 
