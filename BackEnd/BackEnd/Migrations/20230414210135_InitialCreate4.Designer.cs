@@ -3,6 +3,7 @@ using System;
 using BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230414210135_InitialCreate4")]
+    partial class InitialCreate4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,60 +65,6 @@ namespace BackEnd.Migrations
                     b.ToTable("Auths");
                 });
 
-            modelBuilder.Entity("BackEnd.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreateDate")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.Like", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Likes");
-                });
-
             modelBuilder.Entity("BackEnd.Models.Picture", b =>
                 {
                     b.Property<int>("Id")
@@ -161,10 +110,6 @@ namespace BackEnd.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CreateDate")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
@@ -195,15 +140,10 @@ namespace BackEnd.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Occupation")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int?>("PictureId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -211,26 +151,9 @@ namespace BackEnd.Migrations
                     b.HasIndex("PictureId")
                         .IsUnique();
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.UserFriend", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("AddedDate")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("UserId", "FriendId");
-
-                    b.HasIndex("FriendId");
-
-                    b.ToTable("UserFriends");
                 });
 
             modelBuilder.Entity("BackEnd.Models.Auth", b =>
@@ -240,44 +163,6 @@ namespace BackEnd.Migrations
                         .HasForeignKey("BackEnd.Models.Auth", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.Comment", b =>
-                {
-                    b.HasOne("BackEnd.Models.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd.Models.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.Like", b =>
-                {
-                    b.HasOne("BackEnd.Models.Post", "Post")
-                        .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd.Models.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
@@ -306,26 +191,11 @@ namespace BackEnd.Migrations
                         .WithOne("User")
                         .HasForeignKey("BackEnd.Models.User", "PictureId");
 
-                    b.Navigation("Picture");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.UserFriend", b =>
-                {
-                    b.HasOne("BackEnd.Models.User", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd.Models.User", "User")
+                    b.HasOne("BackEnd.Models.User", null)
                         .WithMany("Friends")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Friend");
-
-                    b.Navigation("User");
+                    b.Navigation("Picture");
                 });
 
             modelBuilder.Entity("BackEnd.Models.Picture", b =>
@@ -336,10 +206,6 @@ namespace BackEnd.Migrations
 
             modelBuilder.Entity("BackEnd.Models.Post", b =>
                 {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
-
                     b.Navigation("Pictures");
                 });
 
@@ -348,11 +214,7 @@ namespace BackEnd.Migrations
                     b.Navigation("Auth")
                         .IsRequired();
 
-                    b.Navigation("Comments");
-
                     b.Navigation("Friends");
-
-                    b.Navigation("Likes");
 
                     b.Navigation("Posts");
                 });

@@ -13,9 +13,11 @@ namespace BackEnd.Models
         public int? PictureId { get; set; }
         public Picture? Picture { get; set; }
         public Auth Auth { get; set; }
-
         public List<Post> Posts { get; set; }
         public List<UserFriend> Friends { get; set; }
+        public List<Like> Likes { get; set; }
+        public List<Comment> Comments { get; set; }
+
 
         public User(string firstName, string lastName, string birthDate)
         {

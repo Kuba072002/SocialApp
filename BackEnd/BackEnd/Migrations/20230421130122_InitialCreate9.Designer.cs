@@ -3,6 +3,7 @@ using System;
 using BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230421130122_InitialCreate9")]
+    partial class InitialCreate9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,7 +256,7 @@ namespace BackEnd.Migrations
                         .IsRequired();
 
                     b.HasOne("BackEnd.Models.User", "User")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -272,7 +275,7 @@ namespace BackEnd.Migrations
                         .IsRequired();
 
                     b.HasOne("BackEnd.Models.User", "User")
-                        .WithMany("Likes")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -348,11 +351,7 @@ namespace BackEnd.Migrations
                     b.Navigation("Auth")
                         .IsRequired();
 
-                    b.Navigation("Comments");
-
                     b.Navigation("Friends");
-
-                    b.Navigation("Likes");
 
                     b.Navigation("Posts");
                 });

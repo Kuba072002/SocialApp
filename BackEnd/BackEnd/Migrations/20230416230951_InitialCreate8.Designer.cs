@@ -3,6 +3,7 @@ using System;
 using BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230416230951_InitialCreate8")]
+    partial class InitialCreate8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,60 +63,6 @@ namespace BackEnd.Migrations
                         .IsUnique();
 
                     b.ToTable("Auths");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreateDate")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.Like", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("BackEnd.Models.Picture", b =>
@@ -244,44 +193,6 @@ namespace BackEnd.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BackEnd.Models.Comment", b =>
-                {
-                    b.HasOne("BackEnd.Models.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd.Models.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BackEnd.Models.Like", b =>
-                {
-                    b.HasOne("BackEnd.Models.Post", "Post")
-                        .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd.Models.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("BackEnd.Models.Picture", b =>
                 {
                     b.HasOne("BackEnd.Models.Post", null)
@@ -336,10 +247,6 @@ namespace BackEnd.Migrations
 
             modelBuilder.Entity("BackEnd.Models.Post", b =>
                 {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
-
                     b.Navigation("Pictures");
                 });
 
@@ -348,11 +255,7 @@ namespace BackEnd.Migrations
                     b.Navigation("Auth")
                         .IsRequired();
 
-                    b.Navigation("Comments");
-
                     b.Navigation("Friends");
-
-                    b.Navigation("Likes");
 
                     b.Navigation("Posts");
                 });
