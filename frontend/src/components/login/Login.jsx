@@ -2,6 +2,7 @@ import { React, useState, useEffect } from 'react'
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Dropzone from 'react-dropzone';
+import apiconfig from "../../apiconfig.json"
 import "./login.css"
 
 const Login = () => {
@@ -84,15 +85,15 @@ const Login = () => {
     // console.log(signUpInput);
     // console.log(typeof signUpInput.picture);
     const formData = new FormData();
-    formData.append('email',signUpInput.email);
-    formData.append('password',signUpInput.password);
-    formData.append('confirmPassword',signUpInput.confirmPassword);
-    formData.append('firstName',signUpInput.firstName);
-    formData.append('lastName',signUpInput.lastName);
-    formData.append('birthDate',signUpInput.birthDate);
-    signUpInput.picture !== '' ? formData.append('picture',signUpInput.picture):formData.append('picture',null);
-    
-    const response = await axios.post("https://localhost:7210/api/Auth/register", formData,{
+    formData.append('email', signUpInput.email);
+    formData.append('password', signUpInput.password);
+    formData.append('confirmPassword', signUpInput.confirmPassword);
+    formData.append('firstName', signUpInput.firstName);
+    formData.append('lastName', signUpInput.lastName);
+    formData.append('birthDate', signUpInput.birthDate);
+    signUpInput.picture !== '' ? formData.append('picture', signUpInput.picture) : formData.append('picture', null);
+
+    const response = await axios.post(`${apiconfig.API_KEY}Auth/register`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }).catch((error) => {
       console.log(JSON.stringify(error.response.data));
@@ -113,7 +114,7 @@ const Login = () => {
   const signin = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://localhost:7210/api/Auth/login", {
+    await axios.post(`${apiconfig.API_KEY}Auth/login`, {
       email: signInInput.email,
       password: signInInput.password
     }).then(response => {
@@ -127,10 +128,10 @@ const Login = () => {
     );
   };
 
-  useEffect(() =>{
-    if(sign === 'signup'){
+  useEffect(() => {
+    if (sign === 'signup') {
       document.querySelector('.login').style.height = "110vh";
-    }else{
+    } else {
       document.querySelector('.login').style.height = "100vh";
     }
   }
@@ -243,7 +244,7 @@ const Login = () => {
                   )}
                 </div>
               )}
-            </Dropzone> 
+            </Dropzone>
 
             <button type="submit" className="login_form-btn">Register</button>
             <p>{signUpError.result}</p>

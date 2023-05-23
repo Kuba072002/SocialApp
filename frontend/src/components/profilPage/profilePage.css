@@ -1,17 +1,28 @@
 .profilepage{
     display: flex;
+    height: 100%;
+    min-height: 100vh;
     padding: 1rem;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .profilepage_info{
-    margin: 1rem 5rem;
+    margin: 1rem 4rem;
     display: flex;
-    flex: 0.5;
+    /* flex: 0.5; */
 }
 
 .profilepage_post{
     /* display: flex; */
     /* flex: 1; */
     margin: 1rem 2rem;
+    min-width: 600px;
+}
+
+.profilepage_friends{
+    margin: 1rem 4rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 230px;
 }

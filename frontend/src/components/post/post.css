@@ -3,9 +3,10 @@
     padding: 2rem 2rem 1.3rem;
     margin: 1.5rem 0;
     border-radius: 20px;
+    max-width: 700px;
 }
 
-.post_container{
+.post_container {
     display: flex;
     width: 100%;
     /* justify-content: center; */
@@ -13,7 +14,7 @@
     flex-direction: column;
 }
 
-.post_container-user{
+.post_container-user {
     display: flex;
     margin-bottom: 1rem;
     flex-direction: row;
@@ -22,14 +23,15 @@
     /* gap: 1rem; */
 }
 
-.post_container-user img{
+.post_container-user img {
+
     height: 50px;
     border: 3px solid #767a7c;
     border-radius: 50%;
     margin-right: 0.7rem;
-    }
+}
 
-.post_container-user h5{
+.post_container-user h5 {
     display: flex;
     margin: 0 0.1rem;
     color: #FFFFFF;
@@ -40,7 +42,7 @@
     line-height: 24px;
 }
 
-.post_container-user p{
+.post_container-user p {
     display: flex;
     margin: 0 0.1rem;
     color: #bdc3c7;
@@ -51,23 +53,23 @@
     cursor: pointer;
 }
 
-.post_container-user-elem{
+.post_container-user-elem {
     display: flex;
     flex-direction: row;
 }
 
-.post_container-user svg{
+.post_container-user svg {
     margin-right: 1rem;
     cursor: pointer;
 }
 
-.post_container-content{
+.post_container-content {
     padding: 0.5rem 1rem;
     border-radius: 20px;
     background: #3c3e3f;
 }
 
-.post_container-content p{
+.post_container-content p {
     display: flex;
     color: #bdc3c7;
     font-family: var(--font-family);
@@ -76,24 +78,56 @@
     line-height: 20px;
 }
 
-.post_container-pictures{
-    display: flex;
+.post_container-pictures {
     margin-top: 1rem;
-    justify-content: center;
-    align-items: center;
 }
 
-.post_container-pictures img{
-    display: flex;
+.post_container-pictures img {
+    max-height: 600px;
+    width: 100%;
+    object-fit: contain;
+    /* cover */
+    /* contain */
+    cursor: pointer;
 }
-.post_hr{
+
+.post_hr {
     margin-bottom: 1rem;
     border: 1px solid #767a7c;
     border-radius: 10px;
 }
 
-.post_container-reactions{
+.post_container-reactions {
     display: flex;
     justify-content: space-between;
     margin: 0.5rem 0.5rem 0;
+}
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Add semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.modal-content {
+    max-width: 800px;
+    max-height: 800px;
+    height: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.modal-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }

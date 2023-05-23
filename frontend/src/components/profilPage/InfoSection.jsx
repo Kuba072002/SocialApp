@@ -4,25 +4,11 @@ import { MdOutlineWorkOutline, MdOutlineCake, MdOutlineLocationOn, MdOutlineAcco
 import Account from '../../assets/account.png'
 import './infosection.css'
 
-const InfoSection = ({data}) => {
+const InfoSection = ({ data }) => {
     const [userData, setUserData] = useState('');
 
     useEffect(() => {
-        // async function fetchData() {
-        //     try {
-        //         const token = localStorage.getItem('token');
-        //         const response = await axios.get('https://localhost:7210/api/User/GetMe', {
-        //             headers: {
-        //                 'Authorization': `Bearer ${token}`
-        //             }
-        //         });
-        //         setUserData(response.data);
-        //     } catch (error) {
-        //         console.log(error.response);
-        //     }
-        // }
         setUserData(data);
-        // fetchData();
     }, [data]);
 
     function calculateAge(birthDate) {
@@ -31,8 +17,8 @@ const InfoSection = ({data}) => {
         const currentYear = currentDate.getFullYear();
         const age = currentYear - birthYear;
         return age;
-      }
-// MdOutlineManageAccounts
+    }
+    // MdOutlineManageAccounts
     return (
         <div className='infosection bg'>
             <div className='infosection_container'>
@@ -47,31 +33,31 @@ const InfoSection = ({data}) => {
                 </div>
                 <div className='infosection_container-data'>
                     <div className='infosection_container-data-item'>
-                    {/* <label>Birth date:</label>     */}
-                    <MdOutlineCake color="#fff" size={28}/>
-                    {/* <RiCloseLine color="#fff" size={27} onClick={() => setToggleMenu(false) */}
-                    <p>{`${userData.birthDate}`}</p>
+                        {/* <label>Birth date:</label>     */}
+                        <MdOutlineCake color="#fff" size={28} />
+                        {/* <RiCloseLine color="#fff" size={27} onClick={() => setToggleMenu(false) */}
+                        <p>{`${userData.birthDate}`}</p>
                     </div>
                     <div className='infosection_container-data-item'>
-                    {/* <label>Age:</label>     */}
-                    <MdOutlineAccountCircle color="#fff" size={28}/>
-                    <p>{calculateAge(userData.birthDate).toString()}</p>
+                        {/* <label>Age:</label>     */}
+                        <MdOutlineAccountCircle color="#fff" size={28} />
+                        <p>{calculateAge(userData.birthDate).toString()}</p>
                     </div>
-                    <hr className='infosection_hr'/>
+                    <hr className='infosection_hr' />
                     <div className='infosection_container-data-item'>
-                    {/* <label>Location:</label>     */}
-                    <MdOutlineLocationOn color="#fff" size={28}/>
-                    <p>{`${userData.location}`}</p>
+                        {/* <label>Location:</label>     */}
+                        <MdOutlineLocationOn color="#fff" size={28} />
+                        <p>{`${userData.location}`}</p>
                     </div>
                     <div className='infosection_container-data-item'>
-                    {/* <label>Occupation:</label>     */}
-                    <MdOutlineWorkOutline color="#fff" size={28}/>
-                    <p>{`${userData.occupation}`}</p>
+                        {/* <label>Occupation:</label>     */}
+                        <MdOutlineWorkOutline color="#fff" size={28} />
+                        <p>{`${userData.occupation}`}</p>
                     </div>
                     {/* {userData.lastName}
                     {userData.birthDate} */}
                 </div>
-                
+
             </div>
         </div>
     )

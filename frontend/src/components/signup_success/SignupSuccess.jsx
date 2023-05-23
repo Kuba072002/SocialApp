@@ -2,6 +2,7 @@ import { React, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import apiconfig from "../../apiconfig.json"
 const SignupSuccess = () => {
     const myStyle = {
         height: "100vh",
@@ -43,7 +44,7 @@ const SignupSuccess = () => {
         try {
             //console.log(token);
             console.log(decodeURIComponent(token));
-            await axios.post('https://localhost:7210/api/Auth/confirmEmail', {
+            await axios.post(`${apiconfig.API_KEY}Auth/confirmEmail`, {
                 token: decodeURIComponent(token),
                 purpose: "confirm_email"
             });
@@ -51,7 +52,7 @@ const SignupSuccess = () => {
             setSuccessMessage('Email address confirmed. You can now log in.');
             setIsSuccess(true);
         } catch (error) {
-            console.log(JSON.stringify(error.response.data));
+            //console.log(JSON.stringify(error.response.data));
             setErrorMessage('Email address confirmation failed.')
         }
     };
@@ -66,7 +67,7 @@ const SignupSuccess = () => {
             <h2 style={myStyle2}>Registration success</h2>
             <button style={buttonStyle} onClick={handleSubmit}>Click here to confirm</button>
             <p style={{ marginTop: "0.5rem" }}>{errorMessage}</p>
-            <p>{successMessage}</p>
+            <p style={{color: 'white', marginTop:'0.5rem'}}>{successMessage}</p>
             {isSuccess && <button style={buttonStyle} onClick={handleReturnButton}>Login Page</button>}
         </div>
     )

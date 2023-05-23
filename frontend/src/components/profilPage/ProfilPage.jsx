@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import InfoSection from './InfoSection';
-import { AddPost, Post } from '../';
-import "./profilePage.css"
+import { AddPost, Post, FriendWidget } from '../';
+import apiconfig from "../../apiconfig.json"
+import "./profilePage.css";
 
 const ProfilPage = () => {
     const [userData, setUserData] = useState('');
@@ -23,10 +24,10 @@ const ProfilPage = () => {
     //         console.log(error.response);
     //     }
     // }
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`https://localhost:7210/api/User/GetUser/${userId}`, {
+            const response = await axios.get(`${apiconfig.API_KEY}User/GetUserProfile/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -36,11 +37,11 @@ const ProfilPage = () => {
         } catch (error) {
             console.log(error.response);
         }
-    }
+    },[userId]);
 
     useEffect(() => {  
         fetchData();
-    });
+    },[fetchData]);
     
     return (
         <div>
@@ -60,7 +61,18 @@ const ProfilPage = () => {
                             lastName={userData.lastName}
                             userPicture={userData.picture}
                             pictures={p.pictures}
+                            isProfile={true}
                         />
+                    )}
+                </div>
+                <div className='profilepage_friends'>
+                    {userData && userData.friends.map((f,i) =>
+                    <FriendWidget key={i} 
+                    userId={f.id}
+                    firstName={f.firstName}
+                    lastName={f.lastName}
+                    addedDate={f.addedDate}
+                    userPicture={f.picture} />
                     )}
                 </div>
             </div>

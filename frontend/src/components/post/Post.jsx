@@ -1,38 +1,41 @@
 import React, { useState } from 'react'
 import Account from '../../assets/account.png'
 import { Tooltip } from 'react-tooltip';
-import { MdPersonRemove,MdOutlineFavoriteBorder,MdOutlineMessage } from "react-icons/md";
+import { MdPersonRemove, MdOutlineFavoriteBorder, MdOutlineMessage } from "react-icons/md";
 import './post.css'
+import getTimeAgo from '../../utils/utils';
 
-const Post = ({ id, content, createDate, userId, firstName, lastName, userPicture, pictures }) => {
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+const Post = ({ id, content, createDate, userId, firstName, lastName, userPicture, pictures, isProfile = false }) => {
   // const [currentPostIndex, setCurrentPostIndex] = useState(0);
-  const [currentPictureIndex, setCurrentPictureIndex] = useState(0);
+  // const [currentPictureIndex, setCurrentPictureIndex] = useState(0);
 
-  const handlePictureClick = () => {
-    setCurrentPictureIndex((currentPictureIndex + 1) % pictures.length);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const handleImageClick = (imageSrc) => {
+    setSelectedImage(imageSrc);
   };
 
-  const getTimeAgo = (createDate) => {
-    const dateObj = typeof createDate === 'string' ? new Date(createDate) : createDate;
-    const now = new Date();
-    const diff = now - dateObj;
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const months = Math.floor(diff / (30 * 1000 * 60 * 60 * 24));
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+  };
+  // const handlePictureClick = () => {
+  //   setCurrentPictureIndex((currentPictureIndex + 1) % pictures.length);
+  // };
 
-    if (minutes < 60) {
-      return `${minutes} minutes ago`;
-    } else if (hours < 24) {
-      return `${hours} hours ago`;
-    } else if (days < 30) {
-      return `${days} days ago`;
-    } else if (months < 12) {
-      return `${months} months ago`;
-    }
-    else {
-      return 'More than a year ago';
-    }
+  var settings = {
+    arrows: true,
+    // lazyLoad: true,
+    // fade: true,
+    // centerMode: true,
+    // centerPadding:true,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: true,
   };
 
   return (
@@ -51,29 +54,37 @@ const Post = ({ id, content, createDate, userId, firstName, lastName, userPictur
               <Tooltip id="my-tooltip" place='bottom' />
             </div>
           </div>
-          <MdPersonRemove color="#fff" size={28} />
+          {!isProfile &&
+            <MdPersonRemove color="#fff" size={28} />}
         </div>
         <hr className='post_hr' />
         <div className='post_container-content'>
           <p>{content}</p>
         </div>
         <div className='post_container-pictures'>
-          {/* {post.pictures && post.pictures.map((picture, index) => (
-                    <img key={index} src={`data:image/${picture.fileExtension};base64,${picture.data}`} alt={`${index + 1}`} />
-                ))} */}
-          {pictures && pictures.length > 0 && (
-            <img
-              src={`data:image/${pictures[currentPictureIndex].fileExtension};base64,${pictures[currentPictureIndex].data}`}
-              alt={`${currentPictureIndex + 1} of ${pictures.length}`}
-              onClick={handlePictureClick}
-            />
+          <Slider {...settings} >
+            {pictures && pictures.map((picture, index) => (
+              <div key={index}>
+                <img src={`data:image/${picture.fileExtension};base64,${picture.data}`} alt={`${index + 1}`}
+                  onDoubleClick={() => handleImageClick(picture)}
+                />
+              </div>
+            ))}
+          </Slider>
+          {selectedImage && (
+            <div className="modal" onClick={handleCloseModal}>
+              <div className="modal-content">
+                <img src={`data:image/${selectedImage.fileExtension};base64,${selectedImage.data}`} alt="full_size" />
+                {/* <button onClick={handleCloseModal}>Close</button> */}
+              </div>
+            </div>
           )}
         </div>
         <hr className='addpost_hr' />
         <div className='post_container-reactions'>
-            <MdOutlineFavoriteBorder color="#fff" size={24}/>
-            <MdOutlineMessage color="#fff" size={24}/>
-            {/* MdOutlineFavorite MdMessage*/}
+          <MdOutlineFavoriteBorder color="#fff" size={24} />
+          <MdOutlineMessage color="#fff" size={24} />
+          {/* MdOutlineFavorite MdMessage*/}
         </div>
       </div>
     </div>

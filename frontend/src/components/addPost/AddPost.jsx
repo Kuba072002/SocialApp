@@ -4,6 +4,7 @@ import Dropzone from 'react-dropzone';
 import axios from 'axios';
 import Account from '../../assets/account.png'
 import "./addPost.css"
+import apiconfig from "../../apiconfig.json"
 
 const AddPost = ({ userPicture }) => {
     const [content, setContent] = useState('');
@@ -23,7 +24,7 @@ const AddPost = ({ userPicture }) => {
             formData.append('pictures', null);
         }
         const token = localStorage.getItem('token');
-        const response = await axios.post("https://localhost:7210/api/User/AddPost", formData, {
+        const response = await axios.post(`${apiconfig.API_KEY}Post/AddPost`, formData, {
             headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "multipart/form-data" },
         }).catch((error) => {
             console.log(JSON.stringify(error.response.data));
