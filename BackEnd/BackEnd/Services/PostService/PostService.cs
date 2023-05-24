@@ -94,7 +94,7 @@ namespace BackEnd.Services.PictureService
                 }
             }
             if (posts.Count > 0)
-                posts = (List<PostDto>) posts.OrderByDescending(p => p.CreateDate);
+                posts = (List<PostDto>) posts.OrderByDescending(p => p.CreateDate).ToList();
             return new ServiceResponse<List<PostDto>> { Data = posts, Success = true, Message = "" };
         }
 
