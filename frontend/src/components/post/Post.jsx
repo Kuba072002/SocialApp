@@ -36,6 +36,17 @@ const Post = ({ id, content, createDate, userId, firstName, lastName, userPictur
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,
+    // responsive: [
+    //   {
+    //     breakpoint: 550, // adjust the breakpoint as needed
+    //     settings: {
+    //       slidesToShow: 1,
+    //       slidesToScroll: 1,
+    //       arrows: true,
+    //       adaptiveHeight: true,
+    //     },
+    //   },
+    // ],
   };
 
   return (
@@ -62,7 +73,7 @@ const Post = ({ id, content, createDate, userId, firstName, lastName, userPictur
           <p>{content}</p>
         </div>
         <div className='post_container-pictures'>
-          <Slider {...settings} >
+          <Slider {...settings} style={{ display: 'flex'}}>
             {pictures && pictures.map((picture, index) => (
               <div key={index}>
                 <img src={`data:image/${picture.fileExtension};base64,${picture.data}`} alt={`${index + 1}`}

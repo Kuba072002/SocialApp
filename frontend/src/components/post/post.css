@@ -1,9 +1,12 @@
 .post {
     display: flex;
     padding: 2rem 2rem 1.3rem;
-    margin: 1.5rem 0;
+    margin: 1.5rem auto;
     border-radius: 20px;
-    max-width: 700px;
+    /* max-width: 700px; */
+    /* width: 100%; */
+    
+    box-sizing: border-box;
 }
 
 .post_container {
@@ -65,7 +68,7 @@
 
 .post_container-content {
     padding: 0.5rem 1rem;
-    border-radius: 20px;
+    border-radius: 10px;
     background: #3c3e3f;
 }
 

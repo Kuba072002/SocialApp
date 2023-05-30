@@ -6,6 +6,8 @@ import { ReactComponent as Logo } from '../../assets/logo.svg';
 import {MdLogout} from "react-icons/md"; 
 import "./navbar.css"
 
+export let myUserId;
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState('');//userid export const
@@ -24,6 +26,7 @@ const Navbar = () => {
         }
       });
       setUserId(response.data);
+      myUserId = response.data.toString();
     } catch (error) {
       console.log(error.response);
     }

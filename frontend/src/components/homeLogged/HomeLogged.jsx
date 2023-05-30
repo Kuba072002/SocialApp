@@ -1,10 +1,12 @@
 import { React, useEffect, useState } from 'react'
 import axios from 'axios';
 import apiconfig from "../../apiconfig.json"
-import { InfoSection, AddPost, Post } from "../"
+import { FriendWidget,InfoSection, AddPost, Post } from "../"
+// import FriendWidget from '../friendWidget/FriendWidget';
+import '../profilPage/profilePage.css'
 
 const HomeLogged = () => {
-  const [user, setUser] = useState('');
+  const [userData, setUserData] = useState('');
 
   const fetchData = async () => {
     try {
@@ -14,7 +16,7 @@ const HomeLogged = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-      setUser(response.data);
+      setUserData(response.data);
     } catch (error) {
       console.log(error.response);
     }
@@ -22,32 +24,43 @@ const HomeLogged = () => {
 
   useEffect(() => {
     fetchData();
-    // console.log(user)
-  });
+  },[]);
 
   return (
     <div>
-            <div className='profilepage bg2'>
-                <div className='profilepage_info'>
-                    <InfoSection data={user} />
-                </div>
-                <div className='profilepage_post'>
-                    <AddPost userPicture={user.picture} />
-                    {user && user.posts.map((p,i) => 
-                        <Post key={i} 
-                            id={p.id}
-                            content={p.content}
-                            createDate={p.createDate}
-                            userId={p.userId}
-                            firstName={user.firstName}
-                            lastName={user.lastName}
-                            userPicture={user.picture}
-                            pictures={p.pictures}
-                        />
-                    )}
-                </div>
-            </div>
+      <div className='profilepage bg2'>
+        <div className='profilepage_info'>
+          <InfoSection data={userData} />
         </div>
+
+        <div className='profilepage_post'>
+          <AddPost userPicture={userData.picture} />
+          {userData && userData.posts.map((p, i) =>
+            <Post key={i}
+              id={p.id}
+              content={p.content}
+              createDate={p.createDate}
+              userId={p.userId}
+              firstName={userData.firstName}
+              lastName={userData.lastName}
+              userPicture={userData.picture}
+              pictures={p.pictures}
+              isProfile={true}
+            />
+          )}
+        </div>
+        <div className='profilepage_friends'>
+          {userData && userData.friends.map((f, i) =>
+            <FriendWidget key={i}
+              userId={f.id}
+              firstName={f.firstName}
+              lastName={f.lastName}
+              addedDate={f.addedDate}
+              userPicture={f.picture} />
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
 

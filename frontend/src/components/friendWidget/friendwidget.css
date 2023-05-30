@@ -4,9 +4,9 @@
     align-items: center;
     margin-bottom: 0.7rem;
     border-radius: 15px;
-    min-width: 240px;
-    max-width: 30rem;
-    max-height: 30rem;
+    /* min-width: 240px; */
+    /* max-width: 30rem; */
+    /* max-height: 30rem; */
 }
 
 .friendwidget_container{

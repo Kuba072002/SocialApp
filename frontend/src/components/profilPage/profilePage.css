@@ -8,7 +8,7 @@
 }
 
 .profilepage_info{
-    margin: 1rem 4rem;
+    /* margin: 1rem 4rem; */
     display: flex;
     /* flex: 0.5; */
 }
@@ -21,7 +21,7 @@
 }
 
 .profilepage_friends{
-    margin: 1rem 4rem;
+    /* margin: 1rem 4rem; */
     display: flex;
     flex-direction: column;
     min-width: 230px;
