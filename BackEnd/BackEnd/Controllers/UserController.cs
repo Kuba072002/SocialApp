@@ -6,6 +6,7 @@ using BackEnd.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BackEnd.Controllers
 {
@@ -16,16 +17,18 @@ namespace BackEnd.Controllers
     {
         private readonly IUserService _userService;
         private readonly IPostService _postService;
-        public UserController(IUserService userService,IPostService postService)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public UserController(IUserService userService,IPostService postService, IHttpContextAccessor contextAccessor)
         {
             _userService = userService;
             _postService = postService;
+            _contextAccessor = contextAccessor;
         }
 
-        [HttpGet("GetMyName"), Authorize]
-        public ActionResult<string> GetMyName()
+        [HttpGet("GetMyId"), Authorize]
+        public ActionResult<string> GetMyId()
         {
-            return Ok(_userService.getMyName());
+            return Ok(_userService.getMyId());
         }
 
         [HttpGet("GetMyPicture"), Authorize]
@@ -42,10 +45,42 @@ namespace BackEnd.Controllers
         [HttpGet("getHomeData"), Authorize]
         public async Task<ActionResult<UserDto>> getHomeData()
         {
-            var response = await _userService.getHomeData();
+            if (_contextAccessor.HttpContext != null) {
+                var userId = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if(userId != null)
+                {
+                    var response = await _userService.getUser(int.Parse(userId));
+                    if (!response.Success)
+                    {
+                        return BadRequest(response.Message);
+                    }
+                    else
+                    {
+                        var friends = await _userService.getUserFriends(int.Parse(userId));
+                        var posts = await _postService.getFriendsPosts(int.Parse(userId));
+                        response.Data.Friends = friends.Data;
+                        response.Data.Posts = posts.Data;
+                    }
+                    return Ok(response.Data);
+                }
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("GetUserProfile/{userId}"), Authorize]
+        public async Task<ActionResult<UserDto>> GetUserProfile(int userId)
+        {
+            var response = await _userService.getUser(userId);
             if (!response.Success)
             {
                 return BadRequest(response.Message);
+            }
+            else
+            {
+                var friends = await _userService.getUserFriends(userId);
+                var posts = await _postService.getUserPosts(userId);
+                response.Data.Friends = friends.Data;
+                response.Data.Posts = posts.Data;
             }
             return Ok(response.Data);
         }
@@ -54,28 +89,6 @@ namespace BackEnd.Controllers
         public async Task<ActionResult<UserDto>> GetUser(int userId)
         {
             var response = await _userService.getUser(userId);
-            if (!response.Success)
-            {
-                return BadRequest(response.Message);
-            }
-            return Ok(response.Data);
-        }
-
-        [HttpPost("AddPost"), Authorize]
-        public async Task<ActionResult<string>> AddPost([FromForm] AddPostDto request)
-        {
-            var response = await _postService.addPost(request);
-            if (!response.Success)
-            {
-                return BadRequest(response.Message);
-            }
-            return Ok(response.Message);
-        }
-
-        [HttpGet("GetUserPosts/{userId}"), Authorize]
-        public async Task<ActionResult<List<PostDto>>> GetUserPosts(int userId)
-        {
-            var response = await _postService.getUserPosts(userId);
             if (!response.Success)
             {
                 return BadRequest(response.Message);

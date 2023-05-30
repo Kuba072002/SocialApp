@@ -7,7 +7,7 @@ namespace BackEnd.Services.UserService
 {
     public interface IUserService
     {
-        public string getMyName();
+        public string getMyId();
         Task<ServiceResponse<PictureDto>> getMyPicture();
         Task<ServiceResponse<UserDto>> getHomeData();
         Task<ServiceResponse<UserDto>> getUser(int userId);

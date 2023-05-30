@@ -22,12 +22,12 @@ namespace BackEnd.Services.UserService
             _contextAccessor = contextAccessor;
             _postService = postService;
         }
-        public string getMyName()
+        public string getMyId()
         {
             var result = string.Empty;
             if (_contextAccessor.HttpContext != null)
             {
-                result = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+                result = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
             return result;
         }
@@ -90,12 +90,12 @@ namespace BackEnd.Services.UserService
                         , user.Picture.Data, user.Picture.FileExtension
                     );
                 }
-                var userPosts = await _postService.getUserPosts(userId);
-                if (userPosts.Success)
-                    response.Posts = userPosts.Data;
-                var userFriends = await getUserFriends(userId);
-                if (userFriends.Success)
-                    response.Friends = userFriends.Data;
+                //var userPosts = await _postService.getUserPosts(userId);
+                //if (userPosts.Success)
+                //    response.Posts = userPosts.Data;
+                //var userFriends = await getUserFriends(userId);
+                //if (userFriends.Success)
+                //    response.Friends = userFriends.Data;
                 return new ServiceResponse<UserDto> { Data = response, Success = true, Message = "Success" };
             }
             return new ServiceResponse<UserDto> { Success = false, Message = "Fail" };
@@ -154,6 +154,15 @@ namespace BackEnd.Services.UserService
                 .ToListAsync();
      
             return new ServiceResponse<List<FriendDto>> { Data = friends, Success = true, Message = "" };
+        }
+
+        private async Task<bool> UserExists(int userId)
+        {
+            if (await _context.Users.AnyAsync(u => u.Id == userId))
+            {
+                return true;
+            }
+            return false;
         }
 
     }

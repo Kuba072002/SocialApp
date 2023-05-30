@@ -8,9 +8,6 @@ namespace BackEnd.ModelsDto
         public string Content { get; set; }
         public string CreateDate { get; set; }
         public int UserId { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public PictureDto? UserPicture { get; set; }
         public List<PictureDto>? Pictures { get; set; }
         public List<int>? Likes { get; set; }
         public List<CommentDto>? Comments { get; set; }
@@ -20,13 +17,6 @@ namespace BackEnd.ModelsDto
             Content = content;
             CreateDate = createDate;
             UserId = userId;
-        }
-
-        public void AddUser(string firstName,string lastName,PictureDto? picture)
-        {
-            FirstName= firstName;
-            LastName= lastName;
-            UserPicture = picture;
         }
     }
 }

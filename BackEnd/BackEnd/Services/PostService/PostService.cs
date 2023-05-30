@@ -66,59 +66,60 @@ namespace BackEnd.Services.PictureService
         {
             var friends = await _context.UserFriends
                 .Include(uf => uf.Friend).ThenInclude(f => f.Posts).ThenInclude(p => p.Pictures)
-                //.Include(uf => uf.Friend).ThenInclude(f => f.Posts).ThenInclude(p => p.Comments).ThenInclude(c => c.User).ThenInclude(u=> u.Picture)
-                //.Include(uf => uf.Friend).ThenInclude(f => f.Posts).ThenInclude(p => p.Likes)
-                .Include(uf => uf.Friend.Picture)
+                .Include(uf => uf.Friend).ThenInclude(f => f.Posts).ThenInclude(p => p.Comments)//.ThenInclude(c => c.User).ThenInclude(u=> u.Picture)
+                .Include(uf => uf.Friend).ThenInclude(f => f.Posts).ThenInclude(p => p.Likes)
+                //.Include(uf => uf.Friend.Picture)
                 .Where(uf => uf.UserId == userId).ToListAsync();
             List<PostDto> posts = new();
             foreach (var friend in friends)
             {
                 foreach (var post in friend.Friend.Posts)
                 {
-                    var pictureDtos = new List<PictureDto>();
-                    foreach (var picture in post.Pictures)
-                    {
-                        var pictureDto = new PictureDto(picture.Id,picture.Name
-                            ,picture.Data,picture.FileExtension);
-                        pictureDtos.Add(pictureDto);
-                    }
-                    var postDto = new PostDto(post.Id, post.Content, post.CreateDate,post.UserId);
-                    postDto.Pictures= pictureDtos;
-                    if(friend.Friend.Picture != null)
-                    {
-                        var pictureDto = new PictureDto(friend.Friend.Picture.Id,friend.Friend.Picture.Name
-                            ,friend.Friend.Picture.Data, friend.Friend.Picture.FileExtension);
-                        postDto.AddUser(friend.Friend.FirstName, friend.Friend.LastName, pictureDto);
-                    }
-                    else
-                        postDto.AddUser(friend.Friend.FirstName, friend.Friend.LastName,null);
+                    var postDto = new PostDto(post.Id, post.Content, post.CreateDate, post.UserId);
+                    postDto.Pictures = post.Pictures
+                        .Select(p => new PictureDto(p.Id, p.Name, p.Data, p.FileExtension)).ToList();
+                    postDto.Likes = post.Likes
+                        .Select(l => l.UserId).ToList();
+                    postDto.Comments = post.Comments
+                        .Select(c => new CommentDto(c.Id, c.Content, c.CreateDate, c.UserId)).ToList();
+                    //if(friend.Friend.Picture != null)
+                    //{
+                    //    var pictureDto = new PictureDto(friend.Friend.Picture.Id,friend.Friend.Picture.Name
+                    //        ,friend.Friend.Picture.Data, friend.Friend.Picture.FileExtension);
+                    //    postDto.AddUser(friend.Friend.FirstName, friend.Friend.LastName, pictureDto);
+                    //}
+                    //else
+                    //    postDto.AddUser(friend.Friend.FirstName, friend.Friend.LastName,null);
                     posts.Add(postDto);
                 }
             }
             if (posts.Count > 0)
-                posts = (List<PostDto>) posts.OrderByDescending(p => p.CreateDate);
+                posts = (List<PostDto>) posts.OrderByDescending(p => p.CreateDate).ToList();
             return new ServiceResponse<List<PostDto>> { Data = posts, Success = true, Message = "" };
         }
 
         public async Task<ServiceResponse<List<PostDto>>> getUserPosts(int userId)
         {
-            var user = await _context.Users.Include(u => u.Posts).ThenInclude(p => p.Pictures).FirstOrDefaultAsync(u => u.Id == userId);
-            if (user != null && user.Posts != null)
+            var user = await _context.Users
+                .Include(u => u.Posts).ThenInclude(p => p.Pictures)
+                .Include(u => u.Posts).ThenInclude(p => p.Comments)
+                .Include(u => u.Posts).ThenInclude(p => p.Likes)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
             {
                 List<PostDto> response = new();
-                foreach (Post p in user.Posts.OrderByDescending(p => p.CreateDate))
+                if(user.Posts.Count() == 0)
+                    return new ServiceResponse<List<PostDto>> { Data = response, Success = true, Message = "" };
+                foreach (Post post in user.Posts.OrderByDescending(p => p.CreateDate))
                 {
-                    var post = new PostDto(p.Id, p.Content, p.CreateDate, p.UserId);
-                    if (p.Pictures != null)
-                    {
-                        post.Pictures = new();
-                        foreach (Picture pic in p.Pictures)
-                        {
-                            var picdto = new PictureDto(pic.Id,pic.Name,pic.Data,pic.FileExtension);
-                            post.Pictures.Add(picdto);
-                        }
-                    }
-                    response.Add(post);
+                    var postDto = new PostDto(post.Id, post.Content, post.CreateDate, post.UserId);
+                    postDto.Pictures = post.Pictures
+                        .Select(p => new PictureDto(p.Id, p.Name, p.Data, p.FileExtension)).ToList();
+                    postDto.Likes = post.Likes
+                        .Select(l => l.UserId).ToList();
+                    postDto.Comments = post.Comments
+                        .Select(c => new CommentDto(c.Id, c.Content, c.CreateDate, c.UserId)).ToList();
+                    response.Add(postDto);
                 }
                 return new ServiceResponse<List<PostDto>> { Data = response, Success = true, Message = "" };
             }
