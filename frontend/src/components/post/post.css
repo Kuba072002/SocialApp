@@ -120,8 +120,8 @@
 }
 
 .modal-content {
-    max-width: 800px;
-    max-height: 800px;
+    max-width: 92vw;
+    max-height: 90vh;
     height: 100%;
     text-align: center;
     position: relative;

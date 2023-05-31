@@ -10,9 +10,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const Post = ({ id, content, createDate, userId, firstName, lastName, userPicture, pictures, isProfile = false }) => {
-  // const [currentPostIndex, setCurrentPostIndex] = useState(0);
-  // const [currentPictureIndex, setCurrentPictureIndex] = useState(0);
-
+  
   const [selectedImage, setSelectedImage] = useState(null);
   const handleImageClick = (imageSrc) => {
     setSelectedImage(imageSrc);
@@ -21,32 +19,14 @@ const Post = ({ id, content, createDate, userId, firstName, lastName, userPictur
   const handleCloseModal = () => {
     setSelectedImage(null);
   };
-  // const handlePictureClick = () => {
-  //   setCurrentPictureIndex((currentPictureIndex + 1) % pictures.length);
-  // };
 
   var settings = {
     arrows: true,
-    // lazyLoad: true,
-    // fade: true,
-    // centerMode: true,
-    // centerPadding:true,
     infinite: true,
     speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: true,
-    // responsive: [
-    //   {
-    //     breakpoint: 550, // adjust the breakpoint as needed
-    //     settings: {
-    //       slidesToShow: 1,
-    //       slidesToScroll: 1,
-    //       arrows: true,
-    //       adaptiveHeight: true,
-    //     },
-    //   },
-    // ],
   };
 
   return (
