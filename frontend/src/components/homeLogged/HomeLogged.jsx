@@ -26,6 +26,18 @@ const HomeLogged = () => {
     fetchData();
   },[]);
 
+  const getFriendData = (userId) => {
+    const friend = userData.friends.find((friend) => friend.id === userId);
+    if (friend) {
+      return {
+        firstName: friend.firstName,
+        lastName: friend.lastName,
+        userPicture: friend.picture,
+      };
+    }
+    return {};
+  };
+
   return (
     <div>
       <div className='profilepage bg2'>
@@ -41,9 +53,10 @@ const HomeLogged = () => {
               content={p.content}
               createDate={p.createDate}
               userId={p.userId}
-              firstName={userData.firstName}
-              lastName={userData.lastName}
-              userPicture={userData.picture}
+              {...getFriendData(p.userId)}
+              // firstName={userData.friends.find((f) => f.id === p.userId).firstName}
+              // lastName={userData.lastName}
+              // userPicture={userData.picture}
               pictures={p.pictures}
               isProfile={true}
             />

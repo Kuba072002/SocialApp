@@ -14,6 +14,7 @@
     flex-direction: row;
     padding: 0.3rem 1rem;
     cursor: pointer;
+    width: 100%;
     /* justify-content: space-between; */
     /* gap: 1rem; */
 }
@@ -52,6 +53,7 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
+    white-space: nowrap;
 }
 
 .friendwidget_container-name p {
@@ -63,4 +65,26 @@
     font-size: 12px;
     line-height: 16px;
     cursor: pointer;
+}
+
+@media screen and (min-width: 1410px) {
+    .friendwidget_container{
+        padding: 0.3rem 3.8rem 0.3rem 1rem;
+    }
+}
+@media screen and (max-width: 1100px) {
+    .friendwidget_container-name h5{
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .friendwidget_container-name p{
+        font-size: 10px;
+        line-height: 14px;
+    }
+
+    .friendwidget_container-image img{
+        height: 30px;
+        width: 30px;
+    }
 }

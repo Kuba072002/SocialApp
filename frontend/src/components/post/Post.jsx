@@ -73,7 +73,7 @@ const Post = ({ id, content, createDate, userId, firstName, lastName, userPictur
           <p>{content}</p>
         </div>
         <div className='post_container-pictures'>
-          <Slider {...settings} style={{ display: 'flex'}}>
+          <Slider {...settings} >
             {pictures && pictures.map((picture, index) => (
               <div key={index}>
                 <img src={`data:image/${picture.fileExtension};base64,${picture.data}`} alt={`${index + 1}`}

@@ -14,15 +14,38 @@
 }
 
 .profilepage_post{
-    /* display: flex; */
-    /* flex: 1; */
-    margin: 1rem 2rem;
-    min-width: 600px;
+    margin: 0 2rem;
+    width: 50vw;
 }
 
 .profilepage_friends{
     /* margin: 1rem 4rem; */
     display: flex;
     flex-direction: column;
-    min-width: 230px;
+}
+
+@media screen and (min-width: 1410px) {
+    .profilepage{
+        padding: 1rem 2.5rem;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .profilepage_post {
+        margin: 0 1rem;
+    }
+}
+
+@media screen and (max-width: 990px) {
+    .profilepage_info{
+        display: none;
+    }
+    .profilepage_friends{
+        display: none;
+    }
+
+    .profilepage_post{
+        margin: 0;
+        width: calc(100vw - 2rem);
+    }
 }
